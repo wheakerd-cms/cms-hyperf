@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace app\Controller\Admin;
+namespace App\Controller\Admin;
 
 use App\Abstract\AbstractControllerHttp;
 use Hyperf\HttpServer\Annotation\Controller;
