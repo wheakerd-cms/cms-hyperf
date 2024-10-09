@@ -22,13 +22,11 @@ abstract class AbstractDao
 {
 
     /**
-     * @var Model $model
+     * @var AbstractModel $model
      */
-    protected Model $model;
+    protected AbstractModel $model;
 
-    abstract public function __construct(Model $model);
-
-    public function getModel(): Model
+    public function getModel(): AbstractModel
     {
         return $this->model;
     }

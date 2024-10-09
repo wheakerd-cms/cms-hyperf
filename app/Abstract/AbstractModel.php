@@ -1,9 +1,9 @@
-<?php
+<?php /** @formatter:off */
 declare(strict_types=1);
 
 namespace App\Abstract;
 
-use Carbon\Carbon;
+use App\Traits\Model\TraitModelValidator;use Carbon\Carbon;
 use Hyperf\Database\Model\Concerns\CamelCase;
 use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model;
@@ -15,7 +15,7 @@ use Hyperf\DbConnection\Model\Model;
 abstract class AbstractModel extends Model
 {
 
-    use CamelCase, SoftDeletes;
+    use CamelCase, SoftDeletes, TraitModelValidator;
 
     public bool $timestamps = true;
 

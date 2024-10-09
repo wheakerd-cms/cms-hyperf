@@ -10,7 +10,7 @@ CREATE TABLE `admin_administrator`
     `update_time` int                                                           NOT NULL COMMENT '更新时间',
     `delete_time` int DEFAULT NULL COMMENT '软删除，删除时间',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='后台管理员表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='后台管理员表';
 
 INSERT INTO cms_hyeprf.admin_administrator
 (username,
@@ -19,11 +19,11 @@ INSERT INTO cms_hyeprf.admin_administrator
  status,
  create_time,
  update_time,
- delete_time,)
+ delete_time)
 VALUES ('admin',
         '$2y$10$ib54iCkNk90wGspCqaV7pOwvLaCTN2jEHHg2Oq3o3S4O7txPZo4je',
         0,
         1,
         1724673485,
         1725341944,
-        NULL,);
+        NULL);
