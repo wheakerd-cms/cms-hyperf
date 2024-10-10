@@ -62,7 +62,7 @@ class ModelAdminAdministrator extends AbstractModel
     {
         return [
             'id'          => ['required', 'integer:strict',],
-            'username'    => ['required', 'integer:strict',],
+            'username'    => ['required', 'string',],
             'password'    => ['required', 'string',],
             'role_id'     => ['required', 'integer',],
             'status'      => ['required', 'integer',],

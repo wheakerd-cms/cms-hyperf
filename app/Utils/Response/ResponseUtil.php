@@ -7,7 +7,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\HttpServer\Response;
-use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 
 /**
  * @ResponseUtil
@@ -25,7 +25,7 @@ final class ResponseUtil
     /**
      * @return Response
      */
-    public function getResponse():MessageInterface
+    public function getResponse():Psr7ResponseInterface
     {
         return $this->response->withHeader('Server', 'Swoole');
     }
@@ -35,14 +35,14 @@ final class ResponseUtil
      * @param array|null $data
      * @param string|null $message
      * @param array|null $header
-     * @return MessageInterface
+     * @return Psr7ResponseInterface
      */
     public function message(
         int     $status,
         ?array  $data    = null,
         ?string $message = null,
         ?array  $header  = null,
-    ): MessageInterface
+    ): Psr7ResponseInterface
     {
         $response = $this->getResponse()->json(
             array_filter(
@@ -62,9 +62,9 @@ final class ResponseUtil
      * @code 200
      * @param array $data
      * @param string $message
-     * @return MessageInterface
+     * @return Psr7ResponseInterface
      */
-    public function success(array $data = [], string $message = 'success'): MessageInterface
+    public function success(array $data = [], string $message = 'success'): Psr7ResponseInterface
     {
         return $this->message(200, $data, $message);
     }
@@ -73,55 +73,59 @@ final class ResponseUtil
      * @param string $Token
      * @param array $data
      * @param string $message
-     * @return MessageInterface
+     * @return Psr7ResponseInterface
      */
-    public function auth(string $Token, array $data = [], string $message = 'error'): MessageInterface
+    public function auth(string $Token, array $data = [], string $message = 'error'): Psr7ResponseInterface
     {
+        var_dump(
+            get_class($this->message(200, $data, $message, compact('Token')))
+        );
+
         return $this->message(200, $data, $message, compact('Token'));
     }
 
     /**
      * @param array $data
      * @param string $message
-     * @return MessageInterface
+     * @return Psr7ResponseInterface
      */
-    public function error(array $data = [], string $message = 'error'): MessageInterface
+    public function error(array $data = [], string $message = 'error'): Psr7ResponseInterface
     {
         return $this->message(404, $data, $message);
     }
 
     /**
      * @param string $message
-     * @return MessageInterface
+     * @return Psr7ResponseInterface
      */
-    public function validatorError(string $message = 'error'): MessageInterface
+    public function validatorError(string $message = 'error'): Psr7ResponseInterface
     {
         return $this->message(status: 400, message: $message);
     }
 
     /**
      * @param string $message
-     * @return MessageInterface
+     * @return Psr7ResponseInterface
      */
-    public function authError(string $message = 'error'): MessageInterface
+    public function authError(string $message = 'error'): Psr7ResponseInterface
     {
         return $this->message(status: 401, message: $message);
     }
 
     /**
      * @param string $message
-     * @return MessageInterface
+     * @return Psr7ResponseInterface
      */
-    public function serverError(string $message = 'error'): MessageInterface
+    public function serverError(string $message = 'error'): Psr7ResponseInterface
     {
         return $this->message(status: 500, message: $message);
     }
 
     /**
      * @param array $data
-     * @return MessageInterface
+     * @return Psr7ResponseInterface
      */
-    public function json(array $data): MessageInterface
+    public function json(array $data): Psr7ResponseInterface
     {
         return $this->getResponse()
             ->withBody(

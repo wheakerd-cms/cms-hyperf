@@ -8,6 +8,7 @@ use App\Request\Admin\RequestAdminAdministrator;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\Validation\Annotation\Scene;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @IndexController
@@ -21,22 +22,18 @@ class IndexController extends AbstractControllerHttp
 
     /**
      * @param RequestAdminAdministrator $request
-     * @return array
+     * @return ResponseInterface
      * @api /admin/index/login
      */
     #[
         RequestMapping(path: 'login', methods: ['GET', 'POST']),
         Scene,
     ]
-    public function login(RequestAdminAdministrator $request): array
+    public function login(RequestAdminAdministrator $request): ResponseInterface
     {
         $request->validated();
-        $user = $this->request->input('user', 'Hyperf');
-        $method = $this->request->getMethod();
 
-        return [
-            'method' => $method,
-            'message' => "Hello $user.",
-        ];
+        return $this->response->auth('1234567890', [], '11');
+//        return $this->response->success();
     }
 }
