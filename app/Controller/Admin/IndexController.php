@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
  * @\App\Controller\IndexController
  */
 #[
-    Controller(prefix: '/admin/index', server: 'http'),
+    Controller(prefix: '/admin/index'),
 ]
 class IndexController extends AbstractControllerHttp
 {
@@ -26,7 +26,7 @@ class IndexController extends AbstractControllerHttp
      * @api /admin/index/login
      */
     #[
-        RequestMapping(path: 'login', methods: ['GET', 'POST']),
+        RequestMapping(path: 'login', methods: ['POST']),
         Scene,
     ]
     public function login(RequestAdminAdministrator $request): ResponseInterface

@@ -1,4 +1,3 @@
--- admin_administrator definition
 CREATE TABLE `admin_administrator`
 (
     `id`          int                                                           NOT NULL AUTO_INCREMENT COMMENT '主键',

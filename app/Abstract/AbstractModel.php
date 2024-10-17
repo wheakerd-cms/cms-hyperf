@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Abstract;
 
-use App\Traits\Model\TraitModelValidator;use Carbon\Carbon;
+use Carbon\Carbon;
 use Hyperf\Database\Model\Concerns\CamelCase;
 use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model;
@@ -15,7 +15,7 @@ use Hyperf\DbConnection\Model\Model;
 abstract class AbstractModel extends Model
 {
 
-    use CamelCase, SoftDeletes, TraitModelValidator;
+    use CamelCase, SoftDeletes;
 
     public bool $timestamps = true;
 

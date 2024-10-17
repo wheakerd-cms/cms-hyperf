@@ -10,7 +10,6 @@ namespace App\Abstract;
 use Carbon\Carbon;
 use Closure;
 use Hyperf\Database\Model\Builder;
-use Hyperf\Database\Model\Model;
 use Hyperf\Paginator\LengthAwarePaginator;
 use Hyperf\Stringable\Str;
 
@@ -84,8 +83,7 @@ abstract class AbstractDao
 
     public function insert(array $inputs): bool
     {
-        return $this->model->newInstance()
-            ->fill($inputs)->save();
+        return $this->model->newInstance($inputs)->save();
     }
 
     public function insertAll(array $inputs): bool

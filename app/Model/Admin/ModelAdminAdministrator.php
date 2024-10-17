@@ -1,7 +1,7 @@
 <?php /** @formatter:off */
 declare(strict_types=1);
 
-namespace app\Model\Admin;
+namespace App\Model\Admin;
 
 use App\Abstract\AbstractModel;
 use Carbon\Carbon;
@@ -57,17 +57,4 @@ class ModelAdminAdministrator extends AbstractModel
     public array $scenes = [
         'login' => ['username', 'password'],
     ];
-
-    public function rules(): array
-    {
-        return [
-            'id'          => ['required', 'integer:strict',],
-            'username'    => ['required', 'string',],
-            'password'    => ['required', 'string',],
-            'role_id'     => ['required', 'integer',],
-            'status'      => ['required', 'integer',],
-            'currentPage' => ['required', 'integer:strict', 'min:1',],
-            'pageSizes'   => ['required', 'integer:strict', 'between:10,100',],
-        ];
-    }
 }
