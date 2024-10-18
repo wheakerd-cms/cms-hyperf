@@ -5,10 +5,12 @@ namespace App\Controller\Admin\Permission;
 
 use App\Abstract\AbstractControllerHttp;
 use App\Dao\Admin\DaoAdminRouter;
+use App\Middleware\Admin\MiddlewareAdminAuthentication;
 use App\Request\Admin\RequestAdminRouter;
 use App\Utils\Helper\Functions;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\Middlewares;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\Validation\Annotation\Scene;
 use Psr\Http\Message\ResponseInterface;
@@ -19,6 +21,9 @@ use Psr\Http\Message\ResponseInterface;
  */
 #[
     Controller(prefix: '/admin/permission/menu'),
+    Middlewares([
+        MiddlewareAdminAuthentication::class,
+    ]),
 ]
 class MenuController extends AbstractControllerHttp
 {
@@ -43,7 +48,9 @@ class MenuController extends AbstractControllerHttp
         $data = $request->validated();
 
         if (array_key_exists('id', $data)) {
-            $saved = $this->dao->update($data ['id'], $data);
+            $id = $data['id'];
+            unset($data['id']);
+            $saved = $this->dao->update($id, $data);
             goto end;
         }
 
@@ -85,6 +92,23 @@ class MenuController extends AbstractControllerHttp
 
     /**
      * @return ResponseInterface
+     * @api /admin/permission/menu/table
+     */
+    #[
+        RequestMapping(path: 'update', methods: ['POST']),
+        Scene,
+    ]
+    public function update(): ResponseInterface
+    {
+        $all = $this->request->all();
+        $id = $all['id'];
+        unset($all['id']);
+        $updated = $this->dao->update($id, $all);
+        return $updated ? $this->response->success() : $this->response->error();
+    }
+
+    /**
+     * @return ResponseInterface
      * @api /admin/permission/menu/select
      */
     #[
@@ -92,8 +116,12 @@ class MenuController extends AbstractControllerHttp
     ]
     public function select(): ResponseInterface
     {
-        return $this->response->success(
-            $this->dao->select()
+        $data = $this->dao->select(['id', 'parent_id', 'name']);
+        $list = Functions::listToTree(
+            $data,
+            pid: 'parentId',
         );
+
+        return $this->response->success($list);
     }
 }

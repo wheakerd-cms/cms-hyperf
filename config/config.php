@@ -22,4 +22,7 @@ return [
             LogLevel::WARNING,
         ],
     ],
+    'admin'     =>  [
+        'key'   =>  '7L7wBz2uM8NVFnmQNC95XOZ6NVMscl4Yh0ZWTYjKdTG_aTa8FBM_uRDeNl4RWMz4muflX82CoS8wc0bgkfsjzX3oJrQ_VgmlObCCsUBixYFT8AkjNhuzz98adyaH43AxASf6P1ZpeTvuwnwZzTxsFYwfSDsnfmQWTTnEPVH8eUc',
+    ]
 ];

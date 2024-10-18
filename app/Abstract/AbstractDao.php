@@ -157,6 +157,16 @@ abstract class AbstractDao
     }
 
     /**
+     * @param array $where
+     * @param array $columns
+     * @return array
+     */
+    public function whereSelect(array $where, array $columns = ['*']): array
+    {
+        return $this->getModel()->newQuery()->where($where)->select($columns)->get()->toArray();
+    }
+
+    /**
      * @alias Search Engine
      * @param array{0: integer, 1: integer} $ranks
      * @param array-key<string>[] $params

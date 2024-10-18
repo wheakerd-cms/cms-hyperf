@@ -24,6 +24,7 @@ class RequestAdminRouter extends FormRequest
         'save'  => [
             'id',
             'parentId',
+            'type',
             'name',
             'componentName',
             'component',

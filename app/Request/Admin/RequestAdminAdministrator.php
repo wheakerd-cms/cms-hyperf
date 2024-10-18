@@ -20,7 +20,12 @@ class RequestAdminAdministrator extends FormRequest
     #[Inject]
     protected DaoAdministrator $dao;
 
-    protected array $scenes = [];
+    protected array $scenes = [
+        'login' =>  [
+            'username',
+            'password',
+        ],
+    ];
 
     public function rules(): array
     {

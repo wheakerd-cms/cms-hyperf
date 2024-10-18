@@ -87,12 +87,12 @@ class ModelAdminRouter extends AbstractModel
     }
 
     /**
-     * @param string $value
+     * @param string|null $value
      * @return array
      * @noinspection PhpUnused
      */
-    public function getPermissionsAttribute(string $value): array
+    public function getPermissionsAttribute(string|null $value): array
     {
-        return explode(',', $value);
+        return is_null($value) ? [] : explode(',', $value);
     }
 }

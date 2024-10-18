@@ -85,13 +85,12 @@ final class ResponseUtil
     }
 
     /**
-     * @param array $data
      * @param string $message
      * @return Psr7ResponseInterface
      */
-    public function error(array $data = [], string $message = 'error'): Psr7ResponseInterface
+    public function error(string $message = 'error'): Psr7ResponseInterface
     {
-        return $this->message(404, $data, $message);
+        return $this->message(404, message: $message);
     }
 
     /**
