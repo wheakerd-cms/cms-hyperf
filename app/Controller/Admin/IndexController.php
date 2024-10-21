@@ -5,13 +5,9 @@ namespace App\Controller\Admin;
 
 use App\Abstract\AbstractControllerHttp;
 use App\Dao\Admin\DaoAdministrator;
-use App\Dao\Admin\DaoAdminRoles;
-use App\Dao\Admin\DaoAdminRouter;
 use App\Model\Admin\ModelAdminAdministrator;
 use App\Request\Admin\RequestAdminAdministrator;
 use App\Security\Admin\SecurityAdminJws;
-use App\Service\Admin\ServiceAdminRoles;
-use App\Service\Admin\ServiceAdminRouter;
 use Hyperf\Context\Context;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -33,16 +29,7 @@ class IndexController extends AbstractControllerHttp
     #[Inject]
     protected DaoAdministrator $daoAdministrator;
     #[Inject]
-    protected DaoAdminRouter $daoAdminRouter;
-    #[Inject]
-    protected DaoAdminRoles $daoAdminRoles;
-    #[Inject]
-    protected ServiceAdminRoles $serviceAdminRoles;
-    #[Inject]
     protected SecurityAdminJws $securityAdminJws;
-
-    #[Inject]
-    protected ServiceAdminRouter $serviceAdminRouter;
 
     /**
      * @param RequestAdminAdministrator $request
@@ -93,11 +80,11 @@ class IndexController extends AbstractControllerHttp
         $userinfo = Context::get('userinfo');
 
         $roleId = $userinfo->roleId ?? 0;
+        $routerIdArr = [];
+//        $routerIdArr = $this->serviceAdminRoles->getRouterIds($roleId);
 
-        $routerIdArr = $this->serviceAdminRoles->getRouterIds($roleId);
-
-        $router = $this->serviceAdminRouter->getRouterList($routerIdArr);
-
+//        $router = $this->serviceAdminRouter->getRouterList($routerIdArr);
+        $router = [];
         return $this->response->success($router);
     }
 }

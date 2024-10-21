@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Request\Admin;
 
-use app\Dao\Admin\DaoAdministrator;
+use App\Dao\Admin\DaoAdministrator;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Validation\Request\FormRequest;
 
