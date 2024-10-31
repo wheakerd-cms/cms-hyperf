@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller\Admin\Permission;
+namespace App\Controller\Http\Admin\Permissions;
 
 use App\Abstract\AbstractControllerHttp;
 use App\Dao\Admin\DaoAdminRouter;
@@ -17,10 +17,10 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @MenuController
- * @\App\Controller\Admin\Permission\MenuController
+ * @\App\Controller\Http\Admin\Permissions\MenuController
  */
 #[
-    Controller(prefix: '/admin/permission/menu'),
+    Controller(prefix: '/admin/permissions/menu'),
     Middlewares([
         MiddlewareAdminAuthentication::class,
     ]),

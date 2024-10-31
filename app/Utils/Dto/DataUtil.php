@@ -10,11 +10,11 @@ namespace App\Utils\Dto;
 class DataUtil
 {
 
-    public function __construct(
-        private bool $hasError = false,
-        private string $message,
-        private array $data,
-    )
-    {
-    }
+//    public function __construct(
+//        private bool $hasError = false,
+//        private string $message,
+//        private array $data,
+//    )
+//    {
+//    }
 }

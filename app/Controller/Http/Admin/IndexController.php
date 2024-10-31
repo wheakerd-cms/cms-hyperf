@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller\Admin;
+namespace App\Controller\Http\Admin;
 
 use App\Abstract\AbstractControllerHttp;
 use App\Dao\Admin\DaoAdministrator;
@@ -18,7 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @IndexController
- * @\App\Controller\IndexController
+ * @\App\Controller\Http\Admin\IndexController
  */
 #[
     Controller(prefix: '/admin/index'),

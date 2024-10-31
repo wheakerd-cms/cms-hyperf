@@ -37,6 +37,7 @@
         "hyperf/translation": "^3.1",
         "hyperf/validation": "^3.1.28",
         "hyperf/websocket-server": "^3.1.16",
+        "iconify/json": "^2.2",
         "khanamiryan/qrcode-detector-decoder": "^2.0",
         "spomky-labs/aes-key-wrap": "^7.0",
         "web-token/jwt-framework": "^4.0"
@@ -89,6 +90,9 @@
         "dev": [
             "@post-autoload-dump",
             "@php bin/hyperf.php server:watch"
+        ],
+        "build": [
+            "@php bin/hyperf.php phar:build --name=phar.phar"
         ],
         "command": {}
     }
