@@ -20,6 +20,11 @@ use function json_validate;
 class ResourceController extends AbstractControllerHttp
 {
 
+    /**
+     * @param string $prefix
+     * @return array|ResponseInterface
+     * @api /api/resource/iconify/{prefix}.json
+     */
     #[
         RequestMapping(path: 'iconify/{prefix}.json', methods: ['GET']),
     ]
@@ -41,8 +46,13 @@ class ResourceController extends AbstractControllerHttp
         $json = json_decode($contents, true);
 
         $aliases = $json ['aliases'] [$icons] ?? [];
+        var_dump($aliases,$icons);
         $name = empty($aliases) ? $icons : $aliases ['parent'];
         empty($aliases) || $aliases = [$icons => $aliases];
+
+        var_dump(
+            $json ['icons'] [$name]
+        );
 
         $body = $json ['icons'] [$name] ?? [];
 
