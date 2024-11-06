@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace App\Controller\Http\Admin;
 
 use App\Abstract\AbstractControllerHttp;
-use App\Dao\Admin\DaoAdministrator;
+use App\Middleware\Admin\MiddlewareAdminAuthentication;
 use App\Model\Admin\ModelAdminAdministrator;
 use App\Request\Admin\RequestAdminAdministrator;
-use App\Security\Admin\SecurityAdminJws;
+use App\Service\Admin\ServiceAdminAdministrator;
+use App\Service\Admin\ServiceAdminPermissions;
 use Hyperf\Context\Context;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -27,9 +28,9 @@ class IndexController extends AbstractControllerHttp
 {
 
     #[Inject]
-    protected DaoAdministrator $daoAdministrator;
+    protected ServiceAdminAdministrator $serviceAdminAdministrator;
     #[Inject]
-    protected SecurityAdminJws $securityAdminJws;
+    protected ServiceAdminPermissions $serviceAdminPermissions;
 
     /**
      * @param RequestAdminAdministrator $request
@@ -44,32 +45,24 @@ class IndexController extends AbstractControllerHttp
     {
         $inputs = $request->validated();
 
-        $data = $this->daoAdministrator->findOne([
-            'username' => $inputs ['username'],
-        ]);
+        $token = $this->serviceAdminAdministrator->login(... $inputs);
 
-        if (!$data || !password_verify($inputs ['password'], $data ['password'])) {
-            return $this->response->error('账号或者密码错误!');
+        if ($token === false) {
+            return $this->response->error('账号或密码错误');
         }
 
-        if ($data ['status'] === false) {
-            return $this->response->error('账号或者密码错误!');
-        }
-
-        $token = $this->securityAdminJws->create(['id' => $data ['id']], 60 * 60 * 24 * 30);
-
-        return $this->response->auth($token);
+        return $this->response->auth($token, message: '登录成功');
     }
 
     /**
      * @return ResponseInterface
-     * @api /admin/index/router
+     * @api /admin/index/routes
      */
     #[
-        RequestMapping(path: 'router', methods: ['GET', 'POST']),
         Middlewares([
-//            MiddlewareAdminAuthentication::class,
+            MiddlewareAdminAuthentication::class,
         ]),
+        RequestMapping(path: 'routes', methods: ['GET', 'POST']),
         Scene,
     ]
     public function router(): ResponseInterface
@@ -79,12 +72,8 @@ class IndexController extends AbstractControllerHttp
          */
         $userinfo = Context::get('userinfo');
 
-        $roleId = $userinfo->roleId ?? 0;
-        $routerIdArr = [];
-//        $routerIdArr = $this->serviceAdminRoles->getRouterIds($roleId);
+        $router = $this->serviceAdminPermissions->getRoutes($userinfo->roleId);
 
-//        $router = $this->serviceAdminRouter->getRouterList($routerIdArr);
-        $router = [];
         return $this->response->success($router);
     }
 }

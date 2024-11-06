@@ -46,17 +46,8 @@ class MenuController extends AbstractControllerHttp
     public function save(RequestAdminRouter $request): ResponseInterface
     {
         $data = $request->validated();
+        $saved = $this->dao->save($data);
 
-        if (array_key_exists('id', $data)) {
-            $id = $data['id'];
-            unset($data['id']);
-            $saved = $this->dao->update($id, $data);
-            goto end;
-        }
-
-        $saved = $this->dao->insert($data);
-
-        end:
         return $saved ? $this->response->success() : $this->response->error();
     }
 
@@ -74,8 +65,9 @@ class MenuController extends AbstractControllerHttp
         $params = $request->all();
 
         $paginator = $this->dao->paginator(
-            ranks: [$params ['currentPage'], $params ['pageSize']],
-            params: $params,
+            where: $params,
+            perPage: $params ['pageSize'],
+            page: $params ['currentPage'],
         );
         $collection = $paginator->getCollection()->toArray();
 
@@ -100,10 +92,9 @@ class MenuController extends AbstractControllerHttp
     ]
     public function update(): ResponseInterface
     {
-        $all = $this->request->all();
-        $id = $all['id'];
-        unset($all['id']);
-        $updated = $this->dao->update($id, $all);
+        $data = $this->request->all();
+        $updated = $this->dao->save($data);
+
         return $updated ? $this->response->success() : $this->response->error();
     }
 
@@ -116,7 +107,7 @@ class MenuController extends AbstractControllerHttp
     ]
     public function select(): ResponseInterface
     {
-        $data = $this->dao->select(['id', 'parent_id', 'name']);
+        $data = $this->dao->getNewQuery()->select(['id', 'parent_id', 'name'])->get()->toArray();
         $list = Functions::listToTree(
             $data,
             pid: 'parentId',

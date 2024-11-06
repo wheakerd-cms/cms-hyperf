@@ -5,6 +5,8 @@ namespace App\Dao\Admin;
 
 use App\Abstract\AbstractDao;
 use App\Model\Admin\ModelAdminAdministrator;
+use App\Security\Admin\SecurityAdminJws;
+use Hyperf\Di\Annotation\Inject;
 
 /**
  * @DaoAdminAdministrator
@@ -15,19 +17,12 @@ class DaoAdministrator extends AbstractDao
 
     public function __construct(ModelAdminAdministrator $model)
     {
-        $this->model = $model;
+        parent::__construct($model);
     }
 
     public function findById(int $id): array
     {
-        return $this->model->newQuery()
+        return $this->getModel()->newQuery()
             ->find($id)->toArray();
-    }
-
-    public function findByUsername(string $username): ?ModelAdminAdministrator
-    {
-        return $this->model->newQuery()
-            ->where('username', $username)
-            ->get()?->first();
     }
 }

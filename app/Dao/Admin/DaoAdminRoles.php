@@ -15,6 +15,6 @@ class DaoAdminRoles extends AbstractDao
 
     public function __construct(ModelAdminRoles $model)
     {
-        $this->model = $model;
+        parent::__construct($model);
     }
 }

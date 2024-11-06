@@ -23,173 +23,113 @@ abstract class AbstractDao
     /**
      * @var AbstractModel $model
      */
-    protected AbstractModel $model;
+    private AbstractModel $model;
 
-    public function getModel(): AbstractModel
+    /**
+     * @param $model
+     */
+    public function __construct($model)
     {
-        return $this->model;
+        $this->model = $model;
     }
 
-    public function exist(array $where = []): bool
+    /**
+     * @param array $attributes
+     * @param bool $exists
+     * @return AbstractModel
+     */
+    public function getModel(array $attributes = [], bool $exists = false): AbstractModel
     {
-        return $this->model->newQuery()->where($where)->exists();
+        return $this->model->newInstance($attributes, $exists);
+    }
+
+    /**
+     * @return Builder
+     */
+    public function getNewQuery(): Builder
+    {
+        return $this->model->newQuery();
+    }
+
+    /**
+     * @param array $options
+     * @return bool
+     */
+    public function save(array $options): bool
+    {
+        $attributes = $this->getModel($options)->getAttributes();
+
+        return $this->getModel()->save($attributes);
+    }
+
+    /**
+     * @param int|array $where
+     * @return bool
+     */
+    public function delete(int|array $where): bool
+    {
+        if (is_int($where) || array_is_list($where)) {
+            return (boolean)$this->getModel()->destroy($where);
+        }
+        return $this->getModel()->where($where)->delete();
+    }
+
+    /**
+     * @param array $values
+     * @return bool
+     */
+    public function insert(array $values): bool
+    {
+        return $this->getModel()->insert($values);
     }
 
     /**
      * @param array|int|string $id
      * @param array $columns
-     * @return array
-     */
-    public function find(array|int|string $id, array $columns = ['*']): array
-    {
-        return $this->model->newQuery()->find($id, $columns)->toArray();
-    }
-
-    /**
-     * @param array $where
-     * @param array $columns
      * @return array|null
      */
-    public function findOne(array $where, array $columns = ['*']): array|null
+    public function find(array|int|string $id, array $columns = ['*']): ?array
     {
-        return $this->model->newQuery()
-            ->where($where)
-            ->first($columns)
-            ?->toArray();
+        $data = $this->getNewQuery()->find($id, $columns)->get();
+
+        return $data?->toArray();
     }
 
     /**
-     * @param string $column
-     * @param int|array $where
-     * @return int|string|bool|null
-     */
-    public function value(string $column, int|array $where): null|int|string|bool
-    {
-        if (is_array($where)) {
-            return $this->model->newQuery()
-                ->where($where)
-                ->first()
-                ?->value($column);
-        }
-
-        return $this->model->newQuery()->find($where)->value($column);
-    }
-
-    public function select(array $columns = ['*']): array
-    {
-        return $this->model->newQuery()
-            ->select($columns)->get()->toArray();
-    }
-
-    public function insert(array $inputs): bool
-    {
-        return $this->model->newInstance($inputs)->save();
-    }
-
-    public function insertAll(array $inputs): bool
-    {
-        $data = [];
-        foreach ($inputs as $input) {
-            $model = $this->model->newInstance();
-
-            if ($model->usesTimestamps()) {
-                $model->updateTimestamps();
-            }
-
-            $data[] = $model->fill($input)->getAttributes();
-        }
-
-        return $this->model->newInstance()->insert($data);
-    }
-
-    public function insertGetId(array $inputs): int
-    {
-        $model = $this->model->newInstance();
-
-        if ($model->usesTimestamps()) {
-            $model->updateTimestamps();
-        }
-
-        return $this->model->newInstance()->insertGetId(
-            $model->fill($inputs)->getAttributes()
-        );
-    }
-
-    public function update(int|array $where, array $data): bool
-    {
-        return (boolean)$this->model->newQuery()->where(fn(Builder $query) => is_array($where)
-            ? $query->where($where)
-            : $query->where($this->model->getKeyName(), $where)
-        )->update(
-            $this->model->fill($data)->getDirty()
-        );
-    }
-
-    /**
-     * @param integer|array<integer[]> $ids
-     * @return bool
-     */
-    public function delete(int|array $ids): bool
-    {
-        $model = $this->model->newQuery();
-
-        if (is_int($ids)) {
-            $model = $model->where(
-                $this->model->getKeyName(), $ids
-            );
-        } else {
-            $model = $model->whereIn(
-                $this->model->getKeyName(),
-                $ids
-            );
-        }
-
-        return (boolean)$model->delete();
-    }
-
-    /**
-     * @param array $where
-     * @return bool
-     */
-    public function whereDelete(array $where): bool
-    {
-        return (boolean)$this->model->newQuery()->where($where)->delete();
-    }
-
-    /**
-     * @param array $where
      * @param array $columns
+     * @param array $where
      * @return array
      */
-    public function whereSelect(array $where, array $columns = ['*']): array
+    public function select(array $columns = ['*'], array $where = []): array
     {
-        return $this->getModel()->newQuery()->where($where)->select($columns)->get()->toArray();
+        return $this->getNewQuery()
+            ->where($where)
+            ->select($columns)
+            ->get()->toArray();
     }
 
     /**
      * @alias Search Engine
-     * @param array{0: integer, 1: integer} $ranks
-     * @param array-key<string>[] $params
      * @param <string, mixed>[] | array[] $where
-     * @param string[] $hidden
      * @param <string, mixed>[] | string[] | Closure[] $with
-     * @param array{0: integer, 1: integer} | <string, array{0: integer, 1: integer}[]>[] $order
-     * @return LengthAwarePaginator|array
+     * @param array{0: string, 1: string} | <string, array{0: integer, 1: integer}[]>[] $order
+     * @param int $perPage
+     * @param int $page
+     * @return LengthAwarePaginator
      */
     public function paginator(
-        array $ranks = [],
-        array $params = [],
         array $where = [],
-        array $hidden = [],
         array $with = [],
         array $order = [],
-    ): LengthAwarePaginator|array
+        int   $perPage = 20,
+        int   $page = 1,
+    ): LengthAwarePaginator
     {
         $cast = $this->model->getCasts();
         $fillable = $this->model->getFillable();
         $query = $this->model->newQuery();
 
-        foreach ($params as $key => $value) if (in_array($key, $fillable)) {
+        foreach ($where as $key => $value) if (in_array($key, $fillable)) {
 
             $snakeKey = Str::snake($key);
 
@@ -197,12 +137,11 @@ abstract class AbstractDao
                 $query = match ($cast [$snakeKey]) {
                     'string' => $query->where($snakeKey, 'like', "%$value%"),
                     'datetime' => (function () use ($query, $value, $snakeKey) {
+                        /** @var string $value */
                         if (substr_count($value, ',') !== 1) {
                             return $query;
                         }
-                        /**
-                         * @var array{0: string, 1: string} $values
-                         */
+                        /** @var array{0: string, 1: string} $values */
                         $values = explode(',', $value);
                         return $query->whereBetween($snakeKey, [
                             Carbon::parse(reset($values))->getTimestamp(),
@@ -221,8 +160,6 @@ abstract class AbstractDao
             }
         }
 
-        $query = $query->where($where);
-
         $total = $query->count();
 
         //  order
@@ -240,14 +177,9 @@ abstract class AbstractDao
 
         $collections = $query->with($with);
 
-        if (empty($ranks)) {
-            return $query->get()->makeHidden($hidden)->toArray();
-        }
-
-        list($page, $perPage) = $ranks;
         $collections = $collections->offset(($page - 1) * $perPage)
             ->limit($perPage)
-            ->get()->makeHidden($hidden);
+            ->get();
 
         return new LengthAwarePaginator($collections, $total, $perPage, $page);
     }

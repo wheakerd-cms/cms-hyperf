@@ -75,12 +75,8 @@ final class ResponseUtil
      * @param string $message
      * @return Psr7ResponseInterface
      */
-    public function auth(string $Token, array $data = [], string $message = 'error'): Psr7ResponseInterface
+    public function auth(string $Token, array $data = [], string $message = 'success'): Psr7ResponseInterface
     {
-        var_dump(
-            get_class($this->message(200, $data, $message, compact('Token')))
-        );
-
         return $this->message(200, $data, $message, compact('Token'));
     }
 

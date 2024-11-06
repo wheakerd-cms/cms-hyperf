@@ -10,8 +10,8 @@ use Carbon\Carbon;
  * @property int $id 主键
  * @property int $parentId 父级 ID
  * @property int $type 菜单类型
- * @property string $menuName 菜单名称
- * @property string $componentName 组件名称
+ * @property string $title 菜单名称
+ * @property string $name 组件名称
  * @property string $component 组件路径
  * @property string $icon 图标
  * @property string $permissions 操作权限
@@ -38,8 +38,8 @@ class ModelAdminRouter extends AbstractModel
         'id',
         'parent_id',
         'type',
+        'title',
         'name',
-        'component_name',
         'component',
         'path',
         'icon',
@@ -60,7 +60,7 @@ class ModelAdminRouter extends AbstractModel
         'id'          => 'integer',
         'parent_id'   => 'integer',
         'type'        => 'integer',
-        'menu_name'   => 'string',
+        'title'       => 'string',
         'name'        => 'string',
         'component'   => 'string',
         'path'        => 'string',

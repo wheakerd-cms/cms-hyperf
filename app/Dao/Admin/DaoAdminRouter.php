@@ -15,6 +15,6 @@ class DaoAdminRouter extends AbstractDao
 
     public function __construct(ModelAdminRouter $model)
     {
-        $this->model = $model;
+        parent::__construct($model);
     }
 }

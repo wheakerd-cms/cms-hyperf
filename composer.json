@@ -37,7 +37,6 @@
         "hyperf/translation": "^3.1",
         "hyperf/validation": "^3.1.28",
         "hyperf/websocket-server": "^3.1.16",
-        "iconify/json": "^2.2",
         "khanamiryan/qrcode-detector-decoder": "^2.0",
         "spomky-labs/aes-key-wrap": "^7.0",
         "web-token/jwt-framework": "^4.0"
@@ -82,10 +81,8 @@
         "post-autoload-dump": [
             "rm -rf runtime/container"
         ],
-        "analyse": "phpstan analyse --memory-limit 300M",
         "start": [
-            "Composer\\Config::disableProcessTimeout",
-            "php ./bin/hyperf.php start"
+            "@php bin/hyperf.php start"
         ],
         "dev": [
             "@post-autoload-dump",
@@ -93,7 +90,6 @@
         ],
         "build": [
             "@php bin/hyperf.php phar:build --name=phar.phar"
-        ],
-        "command": {}
+        ]
     }
 }
