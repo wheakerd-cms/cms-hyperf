@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Middleware\Admin;
 
-use App\Dao\Admin\DaoAdministrator;
-use App\Security\Admin\SecurityAdminJws;
-use App\Utils\Response\ResponseUtil;
+use App\Contract\Response;
+use App\Dao\Admin\DaoAdminAdministrator;
+use App\Security\SecurityAdminJws;
 use Hyperf\Context\Context;
 use Hyperf\Di\Annotation\Inject;
 use Psr\Http\Message\ResponseInterface;
@@ -20,18 +20,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 class MiddlewareAdminAuthentication implements MiddlewareInterface
 {
 
-    /**
-     * @var ResponseUtil $responseUtil
-     */
     #[Inject]
-    protected ResponseUtil $responseUtil;
-
-    public function __construct(
-        protected SecurityAdminJws $componentAdminJWS,
-        protected DaoAdministrator $daoAdminAdministrator,
-    )
-    {
-    }
+    protected Response $response;
+    #[Inject]
+    protected SecurityAdminJws $componentAdminJWS;
+    #[Inject]
+    protected DaoAdminAdministrator $daoAdminAdministrator;
 
     /**
      * @param ServerRequestInterface $request
@@ -43,7 +37,7 @@ class MiddlewareAdminAuthentication implements MiddlewareInterface
         $token = $request->getHeaderLine('Token');
 
         if (empty($token) || !$this->componentAdminJWS->check($token)) {
-            return $this->responseUtil->authError('未登录或者登录已过期');
+            return $this->response->authError('未登录或者登录已过期');
         }
 
         $tokenInfo = $this->componentAdminJWS->getPayload($token);
@@ -51,11 +45,11 @@ class MiddlewareAdminAuthentication implements MiddlewareInterface
         $userinfo = $this->daoAdminAdministrator->findById($tokenInfo->id);
 
         if (empty($userinfo)) {
-            return $this->responseUtil->authError('账户不存在');
+            return $this->response->authError('账户不存在');
         }
 
         if (!$userinfo ['status']) {
-            return $this->responseUtil->authError('该账户已被封禁');
+            return $this->response->authError('该账户已被封禁');
         }
 
         Context::set('userinfo', (object)$userinfo);

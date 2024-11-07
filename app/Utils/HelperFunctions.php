@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Utils\Helper;
+namespace App\Utils;
 
-class Functions
+final class HelperFunctions
 {
     static public function listToTree(
         array  &$list,

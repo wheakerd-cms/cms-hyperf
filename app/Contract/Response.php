@@ -1,29 +1,28 @@
 <?php /** @noinspection PhpUnused @formatter:off */
 declare(strict_types=1);
 
-namespace App\Utils\Response;
+namespace App\Contract;
 
-use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\HttpServer\Contract\ResponseInterface;
-use Hyperf\HttpServer\Response;
+use Hyperf\HttpServer\Response as HyperResponse;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 
 /**
  * @ResponseUtil
  * @\App\Utils\Response\ResponseUtil
  */
-final class ResponseUtil
+final class Response
 {
 
-    /**
-     * @var ResponseInterface $response
-     */
-    #[Inject]
     protected ResponseInterface $response;
 
+    public function __construct(ResponseInterface $response){
+        $this->response = $response;
+    }
+
     /**
-     * @return Response
+     * @return HyperResponse
      */
     public function getResponse():Psr7ResponseInterface
     {

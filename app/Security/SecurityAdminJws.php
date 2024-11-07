@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Security\Admin;
+namespace App\Security;
 
 use App\Library\JsonWebToken\LibraryJWS;
 use Hyperf\Config\Annotation\Value;
 
 /**
  * @SecurityAdminJws
- * @\App\Security\Admin\SecurityAdminJws
+ * @\App\Security\SecurityAdminJws
  */
 class SecurityAdminJws extends LibraryJWS
 {

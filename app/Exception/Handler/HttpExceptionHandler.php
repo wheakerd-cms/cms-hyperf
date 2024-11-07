@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace app\Exception\Handler;
 
-use App\Utils\Response\ResponseUtil;
+use App\Contract\Response;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\ExceptionHandler\Annotation\ExceptionHandler;
@@ -25,10 +25,10 @@ class HttpExceptionHandler extends HyperfExceptionHandler
 {
 
     /**
-     * @var ResponseUtil $responseUtil
+     * @var Response $responseUtil
      */
     #[Inject]
-    protected ResponseUtil $responseUtil;
+    protected Response $response;
 
     public function __construct(protected StdoutLoggerInterface $logger)
     {
@@ -43,7 +43,7 @@ class HttpExceptionHandler extends HyperfExceptionHandler
             return $this->handleValidator($throwable);
         }
 
-        return $this->responseUtil->serverError('Internal Server Error.');
+        return $this->response->serverError('Internal Server Error.');
     }
 
     /**
@@ -56,7 +56,7 @@ class HttpExceptionHandler extends HyperfExceptionHandler
         $this->stopPropagation();
         $message = $validationException->validator->errors()->first();
 
-        return $this->responseUtil->validatorError($message);
+        return $this->response->validatorError($message);
     }
 
     public function isValid(Throwable $throwable): bool

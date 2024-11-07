@@ -1,10 +1,11 @@
-<?php /** @formatter:off */
+<?php
 declare(strict_types=1);
 
 namespace App\Model\Admin;
 
 use App\Abstract\AbstractModel;
 use Carbon\Carbon;
+use Hyperf\Database\Model\Relations\BelongsTo;
 
 /**
  * @ModelAdminAdministrator
@@ -42,6 +43,7 @@ class ModelAdminAdministrator extends AbstractModel
 
     /**
      * The attributes that should be cast to native types.
+     * @formatter:off
      */
     protected array $casts = [
         'id'          => 'integer',
@@ -53,8 +55,18 @@ class ModelAdminAdministrator extends AbstractModel
         'update_time' => 'datetime',
         'delete_time' => 'datetime',
     ];
+    //  @formatter:on
 
-    public array $scenes = [
-        'login' => ['username', 'password'],
+    public array $relationship = [
+        'roles',
     ];
+
+    /**
+     * @return BelongsTo
+     * @noinspection PhpUnused
+     */
+    public function roles(): BelongsTo
+    {
+        return $this->belongsTo(ModelAdminRoles::class, 'role_id', 'id');
+    }
 }

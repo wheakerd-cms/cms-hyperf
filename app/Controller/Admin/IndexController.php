@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller\Http\Admin;
+namespace app\Controller\Admin;
 
-use App\Abstract\AbstractControllerHttp;
+use App\Abstract\Controller\AbstractAdminController;
 use App\Middleware\Admin\MiddlewareAdminAuthentication;
 use App\Model\Admin\ModelAdminAdministrator;
 use App\Request\Admin\RequestAdminAdministrator;
-use App\Service\Admin\ServiceAdminAdministrator;
 use App\Service\Admin\ServiceAdminPermissions;
 use Hyperf\Context\Context;
 use Hyperf\Di\Annotation\Inject;
@@ -19,16 +18,14 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @IndexController
- * @\App\Controller\Http\Admin\IndexController
+ * @\App\Controller\Admin\IndexController
  */
 #[
     Controller(prefix: '/admin/index'),
 ]
-class IndexController extends AbstractControllerHttp
+class IndexController extends AbstractAdminController
 {
 
-    #[Inject]
-    protected ServiceAdminAdministrator $serviceAdminAdministrator;
     #[Inject]
     protected ServiceAdminPermissions $serviceAdminPermissions;
 
@@ -45,7 +42,7 @@ class IndexController extends AbstractControllerHttp
     {
         $inputs = $request->validated();
 
-        $token = $this->serviceAdminAdministrator->login(... $inputs);
+        $token = $this->serviceAdminPermissions->login(... $inputs);
 
         if ($token === false) {
             return $this->response->error('账号或密码错误');

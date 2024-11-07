@@ -7,6 +7,8 @@ use App\Abstract\AbstractModel;
 use Carbon\Carbon;
 
 /**
+ * @ModelAdminRouter
+ * @\App\Model\Admin\ModelAdminRouter
  * @property int $id 主键
  * @property int $parentId 父级 ID
  * @property int $type 菜单类型
@@ -65,7 +67,7 @@ class ModelAdminRouter extends AbstractModel
         'component'   => 'string',
         'path'        => 'string',
         'icon'        => 'string',
-        'permissions' => 'string',
+        'permissions' => 'array',
         'status'      => 'boolean',
         'dev'         => 'boolean',
         'fixed'       => 'boolean',
@@ -74,25 +76,15 @@ class ModelAdminRouter extends AbstractModel
         'update_time' => 'datetime',
         'delete_time' => 'datetime',
     ];
-    // @formatter:on
+    //  @formatter:on
 
     /**
-     * @param array $value
+     * @param int|null $value
      * @return void
      * @noinspection PhpUnused
      */
-    public function setPermissionsAttribute(array $value): void
+    public function setParentIdAttribute(null|int $value): void
     {
-        $this->attributes ['permissions'] = implode(',', $value);
-    }
-
-    /**
-     * @param string|null $value
-     * @return array
-     * @noinspection PhpUnused
-     */
-    public function getPermissionsAttribute(string|null $value): array
-    {
-        return is_null($value) ? [] : explode(',', $value);
+        $this->attributes ['parent_id'] = (int)$value;
     }
 }

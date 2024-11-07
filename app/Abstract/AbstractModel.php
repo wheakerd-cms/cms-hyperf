@@ -29,6 +29,11 @@ abstract class AbstractModel extends Model
     public const string DELETED_AT = 'delete_time';
 
     /**
+     * @var array
+     */
+    public array $relationship = [];
+
+    /**
      * @param mixed $value
      * @return string
      * @noinspection PhpUnused
