@@ -78,6 +78,8 @@ class ModelAdminRouter extends AbstractModel
     ];
     //  @formatter:on
 
+    public string $parentIdAttribute = 'parent_id';
+
     /**
      * @param int|null $value
      * @return void

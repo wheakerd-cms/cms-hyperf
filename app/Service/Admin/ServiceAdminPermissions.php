@@ -30,7 +30,11 @@ class ServiceAdminPermissions
         $data = $this->dao->getModel()->newQuery()
             ->where([
                 'username' => $username,
-            ])->first()->toArray();
+            ])->first();
+
+        var_dump(
+            $data->getAttributes()
+        );
 
         if (
             !$data

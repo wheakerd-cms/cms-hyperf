@@ -9,19 +9,17 @@ use Hyperf\Stringable\Str;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * @MappingAdminList
- * @\App\Traits\Mapping\MappingAdminList
+ * @MappingAdminSelect
+ * @\App\Traits\Mapping\MappingAdminSelect
  */
-trait MappingAdminList
+trait MappingAdminSelect
 {
     #[
-        RequestMapping(path: 'list', methods: ['GET']),
+        RequestMapping(path: 'select', methods: ['GET']),
     ]
-    public function list(): ResponseInterface
+    public function select(): ResponseInterface
     {
-        $with = $this->dao->getModel()->relationship ?? [];
-
-        $data = $this->dao->getModel()->newQuery()->with($with)->select()->get()->toArray();
+        $data = $this->dao->getModel()->newQuery()->select()->get()->toArray();
 
         if (isset($this->dao->getModel()->parentIdAttribute)) {
             $parentKey = Str::camel(

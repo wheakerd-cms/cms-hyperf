@@ -29,7 +29,12 @@ abstract class AbstractModel extends Model
     public const string DELETED_AT = 'delete_time';
 
     /**
-     * @var array
+     * @var string $parentIdAttribute
+     */
+    public string $parentIdAttribute;
+
+    /**
+     * @var array $relationship
      */
     public array $relationship = [];
 

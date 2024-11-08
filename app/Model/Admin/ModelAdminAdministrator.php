@@ -6,6 +6,7 @@ namespace App\Model\Admin;
 use App\Abstract\AbstractModel;
 use Carbon\Carbon;
 use Hyperf\Database\Model\Relations\BelongsTo;
+use Jose\Component\Core\Util\Hash;
 
 /**
  * @ModelAdminAdministrator
@@ -57,6 +58,10 @@ class ModelAdminAdministrator extends AbstractModel
     ];
     //  @formatter:on
 
+    protected array $hidden = [
+        'password',
+    ];
+
     public array $relationship = [
         'roles',
     ];
@@ -68,5 +73,15 @@ class ModelAdminAdministrator extends AbstractModel
     public function roles(): BelongsTo
     {
         return $this->belongsTo(ModelAdminRoles::class, 'role_id', 'id');
+    }
+
+    /**
+     * @param string $value
+     * @return void
+     * @noinspection PhpUnused
+     */
+    public function setPasswordAttribute(string $value): void
+    {
+        $this->attributes ['password'] = password_hash($value, PASSWORD_DEFAULT);
     }
 }

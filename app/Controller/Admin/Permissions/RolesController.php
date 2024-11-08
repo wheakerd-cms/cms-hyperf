@@ -9,6 +9,7 @@ use App\Middleware\Admin\MiddlewareAdminAuthentication;
 use App\Traits\Mapping\MappingAdminDelete;
 use App\Traits\Mapping\MappingAdminList;
 use App\Traits\Mapping\MappingAdminSave;
+use App\Traits\Mapping\MappingAdminSelect;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middlewares;
@@ -29,5 +30,5 @@ class RolesController extends AbstractAdminController
     #[Inject]
     protected DaoAdminRoles $dao;
 
-    use MappingAdminDelete, MappingAdminList, MappingAdminSave;
+    use MappingAdminDelete, MappingAdminList, MappingAdminSave, MappingAdminSelect;
 }

@@ -50,4 +50,6 @@ class ModelAdminRoles extends AbstractModel
         'delete_time' => 'integer',
     ];
     //  @formatter:on
+
+    public string $parentIdAttribute = 'parent_id';
 }
